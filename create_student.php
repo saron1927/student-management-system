@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$name, $email]);
 
-    header("Location: list_students.php");
+    header("Location: list_students.php?msg=added");
 }
 ?>
 
