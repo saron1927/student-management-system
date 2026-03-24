@@ -27,6 +27,10 @@ try {
     <div class="container">
         <h2>Student List</h2>
 
+        <div style="margin-bottom: 20px; font-weight: bold; color: #333; background: #f0f0f0; padding: 8px 15px; display: inline-block; border-radius: 5px; border-left: 5px solid #3498db;">
+            Total Students: <?= count($students) ?>
+        </div>
+
         <?php if (isset($_GET['msg'])): ?>
             <?php if ($_GET['msg'] == 'added'): ?>
                 <p style="color: green; font-weight: bold; background: #e8f5e9; padding: 10px; border: 1px solid green; border-radius: 5px;">
@@ -35,6 +39,10 @@ try {
             <?php elseif ($_GET['msg'] == 'deleted'): ?>
                 <p style="color: #721c24; font-weight: bold; background: #f8d7da; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px;">
                     🗑️ Student Removed Successfully!
+                </p>
+            <?php elseif ($_GET['msg'] == 'updated'): ?>
+                <p style="color: #0c5460; font-weight: bold; background: #d1ecf1; padding: 10px; border: 1px solid #bee5eb; border-radius: 5px;">
+                    ✏️ Student Updated Successfully!
                 </p>
             <?php endif; ?>
         <?php endif; ?>
