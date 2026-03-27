@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+// ... rest of your code ...
+?>
+<?php
 require 'config.php';
 
 // 1. GET THE STUDENT'S CURRENT DATA
@@ -54,5 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="list_students.php">Cancel</a>
         </form>
     </div>
+    <?php include 'footer.php'; ?>
 </body>
 </html>

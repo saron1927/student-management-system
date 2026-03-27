@@ -1,4 +1,12 @@
 <?php
+session_start();
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+// ... rest of your code ...
+?>
+<?php
 require 'config.php';
 
 // 1. Logic for Search
@@ -84,6 +92,6 @@ try {
         <br>
         <a href="index.html">Back to Home</a>
     </div>
-    <script src="script.js"></script>
+    <?php include 'footer.php'; ?>
 </body>
 </html>
