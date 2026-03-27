@@ -8,9 +8,10 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a href="list_students.php" class="logo">🎓 Student App</a>
+            <a href="dashboard.php" class="logo">🎓 Student App</a>
             
             <ul class="nav-links">
+                <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="list_students.php">View List</a></li>
                 <li><a href="create_student.php">Add Student</a></li>
                 

@@ -1,67 +1,57 @@
 <?php
 session_start();
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
-// ... rest of your code ...
-?>
-<?php
 require 'config.php';
 
-// 1. GET THE STUDENT'S CURRENT DATA
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $stmt = $pdo->prepare("SELECT * FROM students WHERE id = ?");
-    $stmt->execute([$id]);
-    $student = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$student) {
-        die("Student not found!");
-    }
+if (!isset($_GET['id'])) {
+    header("Location: list_students.php");
+    exit();
 }
 
-// 2. HANDLE THE UPDATE (When the form is submitted)
+$id = $_GET['id'];
+$stmt = $pdo->prepare("SELECT * FROM students WHERE id = ?");
+$stmt->execute([$id]);
+$student = $stmt->fetch();
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $id = $_POST['id'];
     $name = $_POST['name'];
     $email = $_POST['email'];
+    $photoName = $student['photo']; // Start with the current photo name
 
-    try {
-        $stmt = $pdo->prepare("UPDATE students SET name = ?, email = ? WHERE id = ?");
-        $stmt->execute([$name, $email, $id]);
-        
-        // Redirect back with a NEW message type: 'updated'
-        header("Location: list_students.php?msg=updated");
-        exit();
-    } catch (PDOException $e) {
-        echo "Update failed: " . $e->getMessage();
+    // Check if a new file was uploaded
+    if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
+        $targetDir = "uploads/";
+        $newPhotoName = time() . "_" . basename($_FILES["photo"]["name"]);
+        $targetFilePath = $targetDir . $newPhotoName;
+
+        if (move_uploaded_file($_FILES["photo"]["tmp_name"], $targetFilePath)) {
+            // OPTIONAL: Delete the old photo file from the folder (if it's not the default)
+            if ($student['photo'] != 'default.png' && file_exists("uploads/" . $student['photo'])) {
+                unlink("uploads/" . $student['photo']);
+            }
+            $photoName = $newPhotoName;
+        }
     }
+
+    $sql = "UPDATE students SET name = ?, email = ?, photo = ? WHERE id = ?";
+    $pdo->prepare($sql)->execute([$name, $email, $photoName, $id]);
+
+    header("Location: list_students.php?msg=updated");
+    exit();
 }
 ?>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Edit Student</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="container">
-        <h2>Edit Student Details</h2>
-        <form method="POST">
-            <input type="hidden" name="id" value="<?= $student['id'] ?>">
+<div class="container">
+    <h2>Edit Student</h2>
+    <form method="POST" enctype="multipart/form-data"> <label>Current Photo:</label><br>
+        <img src="uploads/<?= $student['photo'] ?>" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin-bottom: 10px; border: 2px solid #3498db;"><br>
 
-            <label>Name:</label><br>
-            <input type="text" name="name" value="<?= htmlspecialchars($student['name']) ?>" required><br><br>
-
-            <label>Email:</label><br>
-            <input type="email" name="email" value="<?= htmlspecialchars($student['email']) ?>" required><br><br>
-
-            <button type="submit">Update Student</button>
-            <a href="list_students.php">Cancel</a>
-        </form>
-    </div>
-    <?php include 'footer.php'; ?>
-</body>
-</html>
+        <input type="text" name="name" value="<?= htmlspecialchars($student['name']) ?>" required>
+        <input type="email" name="email" value="<?= htmlspecialchars($student['email']) ?>" required>
+        
+        <label>Change Photo (Optional):</label>
+        <input type="file" name="photo" accept="image/*">
+        
+        <button type="submit">Update Student</button>
+        <a href="list_students.php">Cancel</a>
+    </form>
+</div>
