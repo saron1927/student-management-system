@@ -2,29 +2,50 @@
 session_start();
 require 'config.php';
 
-// If already logged in, skip the login page
+// 1. REDIRECT IF ALREADY LOGGED IN
 if (isset($_SESSION['user_id'])) {
-    header("Location: dashboard.php");
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: dashboard.php");
+    } else {
+        header("Location: my_profile.php");
+    }
     exit();
 }
 
+// 2. HANDLE LOGIN ATTEMPT
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $username = $_POST['username'];
+    $username = trim($_POST['username']);
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
-    $stmt->execute([$username]);
-    $user = $stmt->fetch();
+    try {
+        // Fetch user by username
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch();
 
-    if ($user && password_verify($password, $user['password'])) {
-        $_SESSION['user_id'] = $user['id'];
-        $_SESSION['username'] = $user['username'];
-        
-        // FIX: Redirect to dashboard.php instead of list_students.php
-        header("Location: dashboard.php");
-        exit();
-    } else {
-        $error = "Invalid username or password!";
+        // Verify user exists and password is correct
+        if ($user && password_verify($password, $user['password'])) {
+            
+            // SECURITY: Regenerate session ID to prevent session fixation
+            session_regenerate_id(true);
+
+            // Set Session Variables
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['role'] = $user['role']; 
+
+            // Redirect based on role
+            if ($user['role'] === 'admin') {
+                header("Location: dashboard.php");
+            } else {
+                header("Location: my_profile.php");
+            }
+            exit();
+        } else {
+            $error = "Invalid username or password!";
+        }
+    } catch (PDOException $e) {
+        $error = "Database error. Please try again later.";
     }
 }
 ?>
@@ -33,82 +54,113 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Login | Student System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Student Management System</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body { 
-            background-color: #f4f4f4; 
+            background-color: #f0f2f5; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             height: 100vh; 
             margin: 0; 
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, sans-serif;
         }
         .login-card { 
             background: white; 
             padding: 40px; 
-            border-radius: 10px; 
-            box-shadow: 0px 4px 15px rgba(0,0,0,0.1); 
-            width: 350px; 
+            border-radius: 12px; 
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.1); 
+            width: 100%;
+            max-width: 400px; 
         }
+        .login-header { text-align: center; margin-bottom: 30px; }
+        .login-header h2 { margin: 0; color: #1a202c; font-size: 1.8rem; }
+        .login-header p { color: #718096; margin-top: 8px; }
+
         .error-msg {
-            color: #721c24;
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            padding: 10px;
-            border-radius: 5px;
-            text-align: center;
-            margin-bottom: 15px;
+            background-color: #fff5f5;
+            color: #c53030;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #feb2b2;
+            margin-bottom: 20px;
             font-size: 0.9rem;
+            text-align: center;
         }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-weight: 600; color: #4a5568; margin-bottom: 8px; }
+        
         input[type="text"], input[type="password"] {
             width: 100%;
             padding: 12px;
-            margin: 10px 0 20px 0;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box; /* Ensures padding doesn't break width */
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1rem;
+            transition: all 0.2s;
         }
+
+        input:focus {
+            border-color: #3182ce;
+            box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+            outline: none;
+        }
+
         button {
             width: 100%;
-            background: #2c3e50;
+            background: #2d3748;
             color: white;
-            padding: 12px;
+            padding: 14px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1rem;
-            font-weight: bold;
-            transition: background 0.3s;
+            font-weight: 700;
+            transition: background 0.2s;
         }
-        button:hover {
-            background: #34495e;
+
+        button:hover { background: #1a202c; }
+
+        .footer-link {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.9rem;
         }
+        .footer-link a { color: #3182ce; text-decoration: none; font-weight: 600; }
     </style>
 </head>
 <body>
 
     <div class="login-card">
-        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">Admin Login</h2>
+        <div class="login-header">
+            <h2>Portal Login</h2>
+            <p>Welcome back! Please sign in.</p>
+        </div>
         
         <?php if (isset($error)): ?>
             <div class="error-msg"><?= $error ?></div>
         <?php endif; ?>
 
-        <form method="POST">
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter username" required>
+        <form method="POST" action="login.php">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Your username" required autofocus>
+            </div>
             
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter password" required>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="••••••••" required>
+            </div>
             
-            <button type="submit">Login to Dashboard</button>
+            <button type="submit">Sign In to Portal</button>
         </form>
 
-        <p style="text-align: center; margin-top: 20px;">
-            <a href="index.html" style="color: #7f8c8d; text-decoration: none; font-size: 0.85rem;">← Back to Home</a>
-        </p>
+        <div class="footer-link">
+            <a href="index.html">← Back to Homepage</a>
+        </div>
     </div>
 
 </body>

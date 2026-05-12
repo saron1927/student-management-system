@@ -1,24 +1,27 @@
 <?php
 session_start();
 
-// 1. SECURITY CHECK: Protect the page from non-logged-in users
+// 1. Security Check: Redirect if not logged in
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
+// 2. Role Check: Only Admins can see the full list
+if ($_SESSION['role'] !== 'admin') {
+    header("Location: my_profile.php"); 
+    exit();
+}
+
 require 'config.php';
 
-// 2. SEARCH LOGIC: Get search term if it exists
 $search = $_GET['search'] ?? '';
 
 try {
     if ($search) {
-        // Search by name using LIKE for partial matches
-        $stmt = $pdo->prepare("SELECT * FROM students WHERE name LIKE ? ORDER BY name ASC");
-        $stmt->execute(["%$search%"]);
+        $stmt = $pdo->prepare("SELECT * FROM students WHERE name LIKE ? OR class_name LIKE ? ORDER BY name ASC");
+        $stmt->execute(["%$search%", "%$search%"]);
     } else {
-        // Fetch all students if no search is active
         $stmt = $pdo->query("SELECT * FROM students ORDER BY name ASC");
     }
     $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -32,19 +35,24 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Student Management System | List</title>
+    <title>Student Directory | List</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
-        th { background-color: #34495e; color: white; }
-        tr:hover { background-color: #f5f5f5; }
-        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 1px solid #ccc; }
-        .stats-container { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-        .badge { background: #3498db; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.9rem; }
-        /* Professional link styling */
-        .student-link { text-decoration: none; color: #2c3e50; font-weight: bold; transition: color 0.2s; }
-        .student-link:hover { color: #3498db; text-decoration: underline; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.05); }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+        th { background-color: #2c3e50; color: white; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+        tr:hover { background-color: #f9f9f9; }
+        .avatar { width: 45px; height: 45px; border-radius: 50%; object-fit: cover; border: 2px solid #eee; }
+        .badge { background: #3498db; color: white; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; }
+        .year-tag { background: #f1f8ff; color: #0366d6; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; border: 1px solid #c8e1ff; }
+        .student-link { text-decoration: none; color: #2c3e50; font-weight: bold; }
+        .student-link:hover { color: #3498db; }
+        .contact-info { font-size: 0.8rem; color: #7f8c8d; line-height: 1.4; }
+        
+        /* Grade Colors */
+        .grade-high { color: #27ae60; font-weight: bold; }
+        .grade-mid { color: #f39c12; font-weight: bold; }
+        .grade-low { color: #e74c3c; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -52,113 +60,96 @@ try {
     <?php include 'header.php'; ?>
 
     <div class="container">
-        <h2>Student Directory</h2>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 20px;">
+            <h2>Student Directory</h2>
+            <a href="create_student.php" style="color: #3498db; text-decoration: none; font-weight: bold;">+ Add New Student</a>
+        </div>
 
-        <div class="stats-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <div>
-                <span class="badge">Total Students: <?= count($students) ?></span>
+                <span class="badge">Total: <?= count($students) ?></span>
                 <?php if ($search): ?>
                     <span style="color: #7f8c8d; margin-left: 10px;">Results for "<?= htmlspecialchars($search) ?>"</span>
                 <?php endif; ?>
             </div>
-            <a href="export_students.php" style="background: #27ae60; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-weight: bold;">
-                📥 Export to CSV
-            </a>
+            <a href="export_students.php" style="background: #27ae60; color: white; padding: 8px 15px; text-decoration: none; border-radius: 5px; font-size: 0.85rem;">📥 Export CSV</a>
         </div>
 
         <?php if (isset($_GET['msg'])): ?>
-            <?php 
-                $msgClass = "flash-message";
-                $style = "padding: 10px; border-radius: 5px; margin-bottom: 15px; font-weight: bold;";
-                if ($_GET['msg'] == 'added') {
-                    echo "<p class='$msgClass' style='$style color: green; background: #e8f5e9; border: 1px solid green;'>✓ Student Added Successfully!</p>";
-                } elseif ($_GET['msg'] == 'deleted') {
-                    echo "<p class='$msgClass' style='$style color: #721c24; background: #f8d7da; border: 1px solid #f5c6cb;'>🗑️ Student Removed Successfully!</p>";
-                } elseif ($_GET['msg'] == 'updated') {
-                    echo "<p class='$msgClass' style='$style color: #0c5460; background: #d1ecf1; border: 1px solid #bee5eb;'>✏️ Student Updated Successfully!</p>";
-                }
-            ?>
+            <div style="padding: 12px; border-radius: 5px; margin-bottom: 20px; background: #e8f5e9; color: #2e7d32; border: 1px solid #c8e6c9; font-size: 0.9rem;">
+                <?php
+                    if($_GET['msg'] == 'added') echo "✓ New student successfully registered.";
+                    if($_GET['msg'] == 'updated') echo "✏️ Profile updated successfully.";
+                    if($_GET['msg'] == 'deleted') echo "🗑️ Student record removed.";
+                ?>
+            </div>
         <?php endif; ?>
 
-        <form method="GET" action="list_students.php" style="margin-bottom: 25px;">
-            <input type="text" name="search" placeholder="Search by name..." value="<?= htmlspecialchars($search) ?>" style="padding: 10px; width: 300px; border: 1px solid #ddd; border-radius: 4px;">
-            <button type="submit" style="padding: 10px 20px; cursor: pointer;">Search</button>
+        <form method="GET" style="margin-bottom: 25px; display: flex; gap: 10px;">
+            <input type="text" name="search" placeholder="Search by name or course..." value="<?= htmlspecialchars($search) ?>" style="padding: 10px; flex: 1; border: 1px solid #ddd; border-radius: 6px;">
+            <button type="submit" style="padding: 10px 25px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 6px; font-weight: bold;">Search</button>
             <?php if ($search): ?>
-                <a href="list_students.php" style="margin-left: 10px; color: #e74c3c; text-decoration: none;">Clear Search</a>
+                <a href="list_students.php" style="padding: 10px; color: #95a5a6; text-decoration: none;">Clear</a>
             <?php endif; ?>
         </form>
 
-        <?php if (!$students): ?>
-            <div style="text-align: center; padding: 50px; background: #f9f9f9; border-radius: 10px;">
-                <p>No students found in the database.</p>
-                <a href="create_student.php" class="button" style="display:inline-block; padding: 10px 20px; background:#3498db; color:white; text-decoration:none; border-radius:5px;">Add Your First Student</a>
-            </div>
-        <?php else: ?>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Photo</th>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($students as $s): ?>
-                    <tr>
-                        <td style="width: 60px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Course/Year</th>
+                    <th>GPA / Grade</th>
+                    <th>Contact Info</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($students as $s): ?>
+                <tr>
+                    <td>
+                        <img src="uploads/<?= !empty($s['photo']) && file_exists("uploads/".$s['photo']) ? $s['photo'] : 'default.png' ?>" class="avatar">
+                    </td>
+                    <td>
+                        <a href="view_student.php?id=<?= $s['id'] ?>" class="student-link">
                             <?php 
-                                $imagePath = "uploads/" . (!empty($s['photo']) ? $s['photo'] : 'default.png');
-                                // Fallback check to ensure image actually exists on server
-                                if (!file_exists($imagePath)) {
-                                    $imagePath = "uploads/default.png";
-                                }
-                            ?>
-                            <img src="<?= $imagePath ?>" class="avatar" alt="Profile">
-                        </td>
-
-                        <td><?= $s['id'] ?></td>
-
-                        <td>
-                            <a href="view_student.php?id=<?= $s['id'] ?>" class="student-link">
-                                <?php 
                                 $name = htmlspecialchars($s['name']);
-                                if ($search) {
-                                    // Highlight search match
-                                    echo str_ireplace($search, "<mark style='background: #f1c40f; padding: 2px;'>$search</mark>", $name);
-                                } else {
-                                    echo $name;
-                                }
-                                ?>
-                            </a>
-                        </td>
+                                echo $search ? str_ireplace($search, "<mark>$search</mark>", $name) : $name;
+                            ?>
+                        </a>
+                    </td>
+                    <td>
+                        <div style="font-weight: 500; color: #2c3e50;"><?= htmlspecialchars($s['class_name'] ?? 'General') ?></div>
+                        <span class="year-tag"><?= htmlspecialchars($s['study_year'] ?? 'N/A') ?></span>
+                    </td>
+                    <td>
+                        <?php 
+                            $gpa = $s['gpa'] ?? 0.00;
+                            $class = ($gpa >= 3.0) ? 'grade-high' : (($gpa >= 2.0) ? 'grade-mid' : 'grade-low');
+                        ?>
+                        <span class="<?= $class ?>" style="font-size: 1.1rem;">
+                            <?= number_format($gpa, 2) ?>
+                        </span>
+                    </td>
+                    <td class="contact-info">
+                        <?= htmlspecialchars($s['email']) ?><br>
+                        <span style="color: #bdc3c7;"><?= htmlspecialchars($s['phone'] ?? '---') ?></span>
+                    </td>
+                    <td>
+                        <a href="edit_student.php?id=<?= $s['id'] ?>" style="color: #3498db; text-decoration: none; font-size: 0.9rem;">Edit</a>
+                        <span style="color: #eee; margin: 0 5px;">|</span>
+                        <a href="remove_student.php?id=<?= $s['id'] ?>" style="color: #e74c3c; text-decoration: none; font-size: 0.9rem;" onclick="return confirm('Permanent delete?')">Delete</a>
+                    </td>
+                </tr>
+                <?php endforeach; ?>
+            </tbody>
+        </table>
 
-                        <td><?= htmlspecialchars($s['email']) ?></td>
-
-                        <td>
-                            <a href="edit_student.php?id=<?= $s['id'] ?>" style="color: #3498db; text-decoration: none; font-weight: bold;">Edit</a>
-                            <span style="color: #ccc; margin: 0 5px;">|</span>
-                            <a href="remove_student.php?id=<?= $s['id'] ?>" 
-                               class="delete-link" 
-                               style="color: #e74c3c; text-decoration: none; font-weight: bold;"
-                               onclick="return confirm('Are you sure you want to delete this student?');">
-                               Delete
-                            </a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        <?php endif; ?>
-
-        <div style="margin-top: 30px;">
-            <a href="dashboard.php" style="color: #666; text-decoration: none;">← Back to Dashboard</a>
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="dashboard.php" style="color: #95a5a6; text-decoration: none; font-size: 0.9rem;">← Return to Admin Dashboard</a>
         </div>
     </div>
 
     <?php include 'footer.php'; ?>
-
-    <script src="script.js"></script>
 </body>
 </html>
