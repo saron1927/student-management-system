@@ -2,134 +2,119 @@
 session_start();
 require 'config.php';
 
-// 1. SECURITY CHECK: Only Admins can create students
-if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
+// 1. SECURITY: Ensure user is logged in
+if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
+$message = "";
+
+// 2. PROCESS FORM SUBMISSION
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $name = trim($_POST['name']);
-    $email = trim($_POST['email']);
-    $phone = trim($_POST['phone']);
-    $class_name = trim($_POST['class_name']);
-    $study_year = $_POST['study_year'];
-    $address = trim($_POST['address']);
-    $photoName = 'default.png';
+    $name = $_POST['name'];
+    $email = $_POST['email'];
+    $phone = $_POST['phone'];
+    $class_name = $_POST['class_name'];
+    $gpa = $_POST['gpa'];
+    $address = $_POST['address'];
+    
+    // Handle Photo Upload
+    $photo = "default.png"; // Default if no file uploaded
+    if (!empty($_FILES['photo']['name'])) {
+        $target_dir = "uploads/";
+        // Create folder if it doesn't exist
+        if (!file_exists($target_dir)) { mkdir($target_dir, 0777, true); }
+        
+        $photo = time() . "_" . basename($_FILES["photo"]["name"]);
+        move_uploaded_file($_FILES["photo"]["tmp_id"], $target_dir . $photo);
+    }
 
     try {
-        $pdo->beginTransaction();
+        // 3. INSERT DATA
+        // Note: We leave user_id as NULL or 0 if this is a general entry, 
+        // or you can set it to $_SESSION['user_id'] if the student is adding themselves.
+        $sql = "INSERT INTO students (name, email, phone, class_name, gpa, address, photo, user_id) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$name, $email, $phone, $class_name, $gpa, $address, $photo, 0]);
 
-        // A. CHECK IF USER ALREADY EXISTS
-        $username = strtolower(str_replace(' ', '', $name)); 
-        $check = $pdo->prepare("SELECT id FROM users WHERE username = ?");
-        $check->execute([$username]);
-        if ($check->fetch()) {
-            // If username exists, add a random number to make it unique
-            $username .= rand(10, 99);
-        }
-
-        // B. CREATE LOGIN ACCOUNT
-        $password = password_hash("student123", PASSWORD_DEFAULT);
-        $stmtUser = $pdo->prepare("INSERT INTO users (username, password, role) VALUES (?, ?, 'student')");
-        $stmtUser->execute([$username, $password]);
-        
-        // IMPORTANT: Get the ID of the user we just created
-        $new_user_id = $pdo->lastInsertId();
-
-        // C. HANDLE PHOTO UPLOAD
-        if (isset($_FILES['photo']) && $_FILES['photo']['error'] == 0) {
-            $targetDir = "uploads/";
-            if (!is_dir($targetDir)) mkdir($targetDir, 0777, true);
-            
-            $photoName = time() . "_" . basename($_FILES["photo"]["name"]);
-            move_uploaded_file($_FILES["photo"]["tmp_name"], $targetDir . $photoName);
-        }
-
-        // D. INSERT STUDENT RECORD (Linked via user_id)
-        $sql = "INSERT INTO students (name, email, phone, class_name, study_year, address, photo, user_id, gpa) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0.00)";
-        $stmtStudent = $pdo->prepare($sql);
-        $stmtStudent->execute([$name, $email, $phone, $class_name, $study_year, $address, $photoName, $new_user_id]);
-
-        $pdo->commit();
-        
-        // SUCCESS: Redirect to the list, NOT the profile
-        header("Location: list_students.php?msg=added");
-        exit();
-
-    } catch (Exception $e) {
-        $pdo->rollBack();
-        $error = "Error: " . $e->getMessage();
+        $message = "<div style='color: #27ae60; padding: 10px; background: #eafaf1; border-radius: 5px; margin-bottom: 20px;'>
+                        ✅ Student registered successfully! <a href='list_students.php'>View List</a>
+                    </div>";
+    } catch (PDOException $e) {
+        $message = "<div style='color: #e74c3c; padding: 10px; background: #fdf2f2; border-radius: 5px; margin-bottom: 20px;'>
+                        ❌ Error: " . $e->getMessage() . "
+                    </div>";
     }
 }
 
-include 'header.php'; 
+include 'header.php';
 ?>
 
-<div class="container" style="max-width: 600px; margin-top: 30px;">
-    <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
-        <h2 style="text-align: center; color: #2c3e50; margin-bottom: 20px;">Register New Student</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register Student</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .form-card { max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #34495e; }
+        input[type="text"], input[type="email"], input[type="number"], textarea, input[type="file"] {
+            width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; box-sizing: border-box;
+        }
+        .submit-btn { background: #3498db; color: white; border: none; padding: 15px 25px; border-radius: 6px; cursor: pointer; font-size: 1rem; font-weight: bold; width: 100%; }
+        .submit-btn:hover { background: #2980b9; }
+    </style>
+</head>
+<body>
+    <div class="form-card">
+        <h2 style="margin-top: 0; color: #2c3e50;">Register New Student</h2>
+        <p style="color: #7f8c8d; margin-bottom: 25px;">Enter the details below to add a student to the database.</p>
         
-        <?php if (isset($error)): ?>
-            <div style="background: #fff5f5; color: #c53030; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
-                <?= $error ?>
-            </div>
-        <?php endif; ?>
+        <?= $message ?>
 
-        <p style="text-align: center; color: #7f8c8d; font-size: 0.9rem; margin-bottom: 30px;">
-            This will create a login with password: <strong>student123</strong>
-        </p>
-
-        <form method="POST" enctype="multipart/form-data">
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Full Name</label>
-                <input type="text" name="name" required placeholder="e.g. John Doe" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+        <form action="create_student.php" method="POST" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" required placeholder="e.g. John Doe">
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Email Address</label>
-                <input type="email" name="email" required placeholder="email@example.com" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" required placeholder="student@example.com">
             </div>
 
-            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
-                <div style="flex: 1;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Course/Class</label>
-                    <input type="text" name="class_name" placeholder="e.g. Computer Science" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" placeholder="0123456789">
                 </div>
-                <div style="flex: 1;">
-                    <label style="display: block; font-weight: bold; margin-bottom: 5px;">Study Year</label>
-                    <select name="study_year" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
-                        <option value="Year 1">Year 1</option>
-                        <option value="Year 2">Year 2</option>
-                        <option value="Year 3">Year 3</option>
-                        <option value="Year 4">Year 4</option>
-                    </select>
+                <div class="form-group">
+                    <label>Class/Course</label>
+                    <input type="text" name="class_name" required placeholder="BSCS - 3A">
                 </div>
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Phone Number</label>
-                <input type="text" name="phone" placeholder="+123 456 789" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;">
+            <div class="form-group">
+                <label>Current GPA (0.00 - 4.00)</label>
+                <input type="number" step="0.01" name="gpa" min="0" max="4" required value="0.00">
             </div>
 
-            <div style="margin-bottom: 15px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Home Address</label>
-                <textarea name="address" rows="2" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px;"></textarea>
+            <div class="form-group">
+                <label>Home Address</label>
+                <textarea name="address" rows="3" placeholder="Enter complete address..."></textarea>
             </div>
 
-            <div style="margin-bottom: 25px;">
-                <label style="display: block; font-weight: bold; margin-bottom: 5px;">Profile Photo</label>
-                <input type="file" name="photo" accept="image/*" style="margin-top: 5px;">
+            <div class="form-group">
+                <label>Profile Photo</label>
+                <input type="file" name="photo" accept="image/*">
             </div>
 
-            <button type="submit" style="width: 100%; background: #27ae60; color: white; padding: 14px; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 1rem;">Create Student Profile</button>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="list_students.php" style="color: #95a5a6; text-decoration: none; font-size: 0.9rem;">Cancel and Return</a>
-            </div>
+            <button type="submit" class="submit-btn">Save Student Record</button>
         </form>
     </div>
-</div>
-
-<?php include 'footer.php'; ?>
+</body>
+</html>
