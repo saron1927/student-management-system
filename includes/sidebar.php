@@ -6,7 +6,7 @@ $role = $_SESSION['role'] ?? '';
 <aside class="sidebar">
     <div class="sidebar-header">
         <i class="fas fa-graduation-cap fa-2x"></i>
-        <h2 style="font-size: 1.25rem;">UNITRACK SMS</h2>
+        <h2 style="font-size: 1.25rem;">ST THRESA SMS</h2>
     </div>
     <ul class="sidebar-menu">
         <li>

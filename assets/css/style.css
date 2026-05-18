@@ -1,15 +1,15 @@
 /* assets/css/style.css */
 :root {
-    --primary: #0f172a;
-    --secondary: #1e293b;
-    --accent: #3b82f6;
-    --success: #10b981;
-    --danger: #ef4444;
-    --warning: #f59e0b;
-    --info: #06b6d4;
-    --light: #f8fafc;
-    --text-main: #1e293b;
-    --text-muted: #64748b;
+    --primary: #820F36;
+    --secondary: #820F36;
+    --accent: #820F36;
+    --success: #820F36;
+    --danger: #45110F;
+    --warning: #946059;
+    --info: #854E48;
+    --light: #FCFAF9;
+    --text-main: #301312;
+    --text-muted: #8E7472;
     --white: #ffffff;
     --sidebar-width: 260px;
     --transition: all 0.3s ease;
@@ -25,7 +25,7 @@
 }
 
 body {
-    background-color: #f1f5f9;
+    background-color: #F8F5F4;
     color: var(--text-main);
     overflow-x: hidden;
 }
@@ -106,7 +106,7 @@ body {
 }
 
 .btn-primary:hover {
-    background: #2563eb;
+    background: var(--primary);
     transform: translateY(-1px);
 }
 
@@ -242,7 +242,7 @@ table {
 th {
     text-align: left;
     padding: 1rem 1.5rem;
-    background: #f8fafc;
+    background: #F5EEEE;
     font-size: 0.75rem;
     text-transform: uppercase;
     font-weight: 600;
@@ -251,12 +251,12 @@ th {
 
 td {
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #f1f5f9;
+    border-bottom: 1px solid #EADAD9;
     font-size: 0.875rem;
 }
 
 tr:hover td {
-    background: #f8fafc;
+    background: #FCFAF9;
 }
 
 .badge {
@@ -266,8 +266,8 @@ tr:hover td {
     font-weight: 600;
 }
 
-.badge-success { background: #d1fae5; color: #065f46; }
-.badge-danger { background: #fee2e2; color: #991b1b; }
+.badge-success { background: #F5EEEE; color: #820F36; }
+.badge-danger { background: #fee2e2; color: #820F36; }
 
 @keyframes slideUp {
     from { opacity: 0; transform: translateY(20px); }
