@@ -114,8 +114,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="feature-icon" style="background: #fef3c7; color: #d97706;">
                     <i class="fas fa-user-tie"></i>
                 </div>
-                <h3 class="feature-title">Expert Faculty</h3>
-                <p class="feature-desc">Taught by highly credentialed scholars and industry experts committed to fostering creativity and academic success.</p>
+                <h3 class="feature-title">Expert Teachers</h3>
+                <p class="feature-desc">Taught by highly credentialed educators committed to fostering creativity, kindness, and foundational success.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon" style="background: #fee2e2; color: #dc2626;">
@@ -140,7 +140,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <span class="section-tag" style="text-align: left; margin: 0 0 0.75rem 0;">Our Story & Mission</span>
                 <h2 class="section-title" style="text-align: left; margin-bottom: 1.5rem;">Fostering a Culture of Innovation & Integrity</h2>
                 <p class="about-tagline">"We don't just teach courses; we guide tomorrow's global trailblazers to fulfill their maximum capability."</p>
-                <p class="about-p">ST Thresa School was founded with the singular goal of integrating technology and top-tier pedagogical practices. We provide a space where curiosity is celebrated and students have access to operational virtual platforms to manage their academic careers.</p>
+                <p class="about-p">ST Thresa School was founded with the singular goal of integrating child development and top-tier pedagogical practices. We provide a nurturing space where curiosity is celebrated and parents have access to modern virtual platforms to track their child's progress.</p>
                 
                 <div class="about-values">
                     <div class="value-item">
@@ -180,49 +180,49 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <section class="section section-bg" id="courses">
         <div class="section-header">
             <span class="section-tag">Our Programs</span>
-            <h2 class="section-title">Popular Academic Courses</h2>
-            <p class="section-desc">Explore a selection of our premium engineering and computer science programs led by our highly qualified instructors.</p>
+            <h2 class="section-title">Popular Primary Subjects</h2>
+            <p class="section-desc">Explore a selection of our core subjects led by our highly qualified elementary teachers.</p>
         </div>
         <div class="courses-grid">
             <div class="course-card">
                 <div class="course-img-wrapper">
                     <img src="assets/images/photo4.jpg" alt="ST Thresa Student Profile" class="course-img">
-                    <span class="course-badge">Computer Science</span>
+                    <span class="course-badge">Early Learning</span>
                 </div>
                 <div class="course-body">
-                    <a href="#hero" class="course-title">Web Development (CS202)</a>
-                    <p class="course-desc">A deep dive into advanced frontend architectures, databases, PHP backend operations, and modern CSS3 styles.</p>
+                    <a href="#hero" class="course-title">Mathematics (Grade 3)</a>
+                    <p class="course-desc">Building foundational math skills including addition, subtraction, multiplication basics, and introductory geometry.</p>
                     <div class="course-meta">
                         <span><i class="fas fa-graduation-cap"></i> Saron Welyu</span>
-                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> 4 Credits</span>
+                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> Core Subject</span>
                     </div>
                 </div>
             </div>
             <div class="course-card">
                 <div class="course-img-wrapper">
                     <img src="assets/images/photo6.jpg" alt="ST Thresa Student" class="course-img">
-                    <span class="course-badge">Data Systems</span>
+                    <span class="course-badge">Language Arts</span>
                 </div>
                 <div class="course-body">
-                    <a href="#hero" class="course-title">Database Systems (CS301)</a>
-                    <p class="course-desc">Analyze relational databases, design robust entities, write advanced MySQL queries, and study index structures.</p>
+                    <a href="#hero" class="course-title">Reading & Phonics (Grade 1)</a>
+                    <p class="course-desc">Developing reading comprehension, early writing skills, and phonemic awareness in a supportive environment.</p>
                     <div class="course-meta">
                         <span><i class="fas fa-graduation-cap"></i> Saron Welyu</span>
-                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> 3 Credits</span>
+                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> Core Subject</span>
                     </div>
                 </div>
             </div>
             <div class="course-card">
                 <div class="course-img-wrapper">
                     <img src="assets/images/photo7.jpg" alt="ST Thresa Student" class="course-img">
-                    <span class="course-badge">Engineering</span>
+                    <span class="course-badge">Science</span>
                 </div>
                 <div class="course-body">
-                    <a href="#hero" class="course-title">Software Engineering (SE101)</a>
-                    <p class="course-desc">Discover complex project management cycles, unit-testing, model structures, and responsive design patterns.</p>
+                    <a href="#hero" class="course-title">General Science (Grade 4)</a>
+                    <p class="course-desc">Hands-on experiments introducing students to earth sciences, biology, and the natural world around us.</p>
                     <div class="course-meta">
                         <span><i class="fas fa-graduation-cap"></i> Not Assigned</span>
-                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> 3 Credits</span>
+                        <span style="font-weight: 700; color: var(--accent);"><i class="fas fa-star"></i> Core Subject</span>
                     </div>
                 </div>
             </div>
@@ -269,27 +269,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="testimonial-avatar">AJ</div>
                     <div>
                         <h5>Alice Johnson</h5>
-                        <p>Computer Science Student</p>
+                        <p>Grade 5 Student</p>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
-                <p class="testimonial-quote">"As an instructor, having dual transactional double-insert profiles for registering students, tracking attendance, and uploading marks lets me focus on what's most important: high quality teaching!"</p>
+                <p class="testimonial-quote">"As an elementary teacher, having an easy portal to track attendance, communicate with parents, and upload report cards lets me focus on what's most important: teaching!"</p>
                 <div class="testimonial-user">
                     <div class="testimonial-avatar">JS</div>
                     <div>
-                        <h5>Dr. John Smith</h5>
-                        <p>Senior Faculty Teacher</p>
+                        <h5>Mr. John Smith</h5>
+                        <p>Primary Teacher</p>
                     </div>
                 </div>
             </div>
             <div class="testimonial-card">
-                <p class="testimonial-quote">"ST Thresa School gave my daughter the exact skills she needed to land a job at a global technology firm. The school environment is supportive and modern."</p>
+                <p class="testimonial-quote">"ST Thresa School provides a wonderful, safe environment where my daughter is thriving. The teachers are fantastic and the digital portal keeps us informed."</p>
                 <div class="testimonial-user">
                     <div class="testimonial-avatar">MP</div>
                     <div>
                         <h5>Marcus Peters</h5>
-                        <p>Parent of Graduate Student</p>
+                        <p>Parent of Grade 2 Student</p>
                     </div>
                 </div>
             </div>
@@ -308,8 +308,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <li class="contact-item">
                         <i class="fas fa-map-marker-alt"></i>
                         <div>
-                            <h6>Campus Location</h6>
-                            <p>102 University Avenue, Academic Square, NY 10012</p>
+                            <h6>School District Location</h6>
+                            <p>102 Elementary Way, Academic Square, NY 10012</p>
                         </div>
                     </li>
                     <li class="contact-item">

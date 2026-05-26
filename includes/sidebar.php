@@ -28,12 +28,17 @@ $role = $_SESSION['role'] ?? '';
         </li>
         <li>
             <a href="departments.php" class="sidebar-link <?= ($current_page == 'departments.php') ? 'active' : '' ?>">
-                <i class="fas fa-building"></i> Departments
+                <i class="fas fa-building"></i> Classes and Sections
             </a>
         </li>
         <li>
             <a href="courses.php" class="sidebar-link <?= ($current_page == 'courses.php') ? 'active' : '' ?>">
-                <i class="fas fa-book"></i> Courses
+                <i class="fas fa-book"></i> Subjects
+            </a>
+        </li>
+        <li>
+            <a href="class-schedule.php" class="sidebar-link <?= in_array($current_page, ['class-schedule.php','class-schedule-create.php','class-schedule-edit.php','class-schedule-view.php']) ? 'active' : '' ?>">
+                <i class="fas fa-calendar-alt"></i> Class Schedule
             </a>
         </li>
         <?php endif; ?>
@@ -41,7 +46,7 @@ $role = $_SESSION['role'] ?? '';
         <?php if ($role == 'teacher'): ?>
         <li>
             <a href="my-courses.php" class="sidebar-link <?= ($current_page == 'my-courses.php') ? 'active' : '' ?>">
-                <i class="fas fa-book"></i> My Courses
+                <i class="fas fa-book"></i> My Subjects
             </a>
         </li>
         <li>
@@ -59,7 +64,7 @@ $role = $_SESSION['role'] ?? '';
         <?php if ($role == 'student'): ?>
         <li>
             <a href="enrolled-courses.php" class="sidebar-link <?= ($current_page == 'enrolled-courses.php') ? 'active' : '' ?>">
-                <i class="fas fa-book-reader"></i> Enrolled Courses
+                <i class="fas fa-book-reader"></i> Enrolled Subjects
             </a>
         </li>
         <li>

@@ -50,8 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="main-content">
     <header class="top-nav">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700;">Add New Course</h1>
-            <p style="color: var(--text-muted);"><a href="courses.php" style="color: var(--accent); text-decoration: none;">Courses</a> &raquo; Add New</p>
+            <h1 style="font-size: 1.5rem; font-weight: 700;">Add New Subject</h1>
+            <p style="color: var(--text-muted);"><a href="courses.php" style="color: var(--accent); text-decoration: none;">Subjects</a> &raquo; Add New</p>
         </div>
         <a href="courses.php" class="btn" style="background: #f1f5f9; color: var(--text-main); text-decoration: none; width: auto;">
             <i class="fas fa-arrow-left"></i> Back to List
@@ -67,32 +67,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if (count($departments) === 0): ?>
             <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
-                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create a department</a> before adding a course!
+                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create a class and section</a> before adding a subject!
             </div>
         <?php endif; ?>
 
         <div class="card">
             <div class="card-header">
-                <h2 style="font-size: 1.125rem;">Course Details</h2>
+                <h2 style="font-size: 1.125rem;">Subject Details</h2>
             </div>
             <div style="padding: 1.5rem;">
                 <form method="POST">
                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label for="name" style="font-weight: 600;">Course Name</label>
-                            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Data Structures & Algorithms" required autofocus>
+                            <label for="name" style="font-weight: 600;">Subject Name</label>
+                            <input type="text" id="name" name="name" class="form-control" placeholder="e.g. Mathematics" required autofocus>
                         </div>
                         <div class="form-group">
-                            <label for="code" style="font-weight: 600;">Course Code</label>
-                            <input type="text" id="code" name="code" class="form-control" placeholder="e.g. CS204" required maxlength="10">
+                            <label for="code" style="font-weight: 600;">Subject Code</label>
+                            <input type="text" id="code" name="code" class="form-control" placeholder="e.g. MATH1" required maxlength="10">
                         </div>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Department</label>
+                            <label for="dept_id" style="font-weight: 600;">Class and Section</label>
                             <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Department --</option>
+                                <option value="">-- Select Class and Section --</option>
                                 <?php foreach ($departments as $dept): ?>
                                     <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?> (<?= htmlspecialchars($dept['code']) ?>)</option>
                                 <?php endforeach; ?>
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <button type="submit" class="btn btn-primary" style="margin-top: 1rem;" <?= (count($departments) === 0) ? 'disabled' : '' ?>>
-                        <i class="fas fa-save"></i> Save Course
+                        <i class="fas fa-save"></i> Save Subject
                     </button>
                 </form>
             </div>

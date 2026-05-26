@@ -18,11 +18,11 @@ if (!empty($search)) {
 <main class="main-content">
     <header class="top-nav">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700;">Manage Departments</h1>
-            <p style="color: var(--text-muted);">Configure academic departments and branches</p>
+            <h1 style="font-size: 1.5rem; font-weight: 700;">Manage Classes and Sections</h1>
+            <p style="color: var(--text-muted);">Configure class grades and sections</p>
         </div>
         <a href="department-create.php" class="btn btn-primary" style="width: auto; text-decoration: none;">
-            <i class="fas fa-plus"></i> Add New Department
+            <i class="fas fa-plus"></i> Add New Class and Section
         </a>
     </header>
 
@@ -56,7 +56,7 @@ if (!empty($search)) {
                 <thead>
                     <tr>
                         <th style="width: 80px;">ID</th>
-                        <th>Department Name</th>
+                        <th>Class and Section Name</th>
                         <th>Code</th>
                         <th>Created At</th>
                         <th style="width: 150px; text-align: right;">Actions</th>
@@ -73,14 +73,14 @@ if (!empty($search)) {
                             <td>
                                 <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
                                     <a href="department-edit.php?id=<?= $dept['id'] ?>" class="btn" style="padding: 0.5rem; background: #e0f2fe; color: var(--accent);"><i class="fas fa-edit"></i></a>
-                                    <a href="department-delete.php?id=<?= $dept['id'] ?>" class="btn" style="padding: 0.5rem; background: #fee2e2; color: var(--danger);" onclick="return confirm('Are you sure you want to delete this department? Any courses, teachers or students linked to this department may be impacted.')"><i class="fas fa-trash"></i></a>
+                                    <a href="department-delete.php?id=<?= $dept['id'] ?>" class="btn" style="padding: 0.5rem; background: #fee2e2; color: var(--danger);" onclick="return confirm('Are you sure you want to delete this class and section? Any subjects, teachers or students linked to this class and section may be impacted.')"><i class="fas fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No departments found.</td>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No classes and sections found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

@@ -52,8 +52,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="main-content">
     <header class="top-nav">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700;">Edit Department</h1>
-            <p style="color: var(--text-muted);"><a href="departments.php" style="color: var(--accent); text-decoration: none;">Departments</a> &raquo; Edit</p>
+            <h1 style="font-size: 1.5rem; font-weight: 700;">Edit Class and Section</h1>
+            <p style="color: var(--text-muted);"><a href="departments.php" style="color: var(--accent); text-decoration: none;">Classes and Sections</a> &raquo; Edit</p>
         </div>
         <a href="departments.php" class="btn" style="background: #f1f5f9; color: var(--text-main); text-decoration: none; width: auto;">
             <i class="fas fa-arrow-left"></i> Back to List
@@ -69,17 +69,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="card">
             <div class="card-header">
-                <h2 style="font-size: 1.125rem;">Edit Department Details</h2>
+                <h2 style="font-size: 1.125rem;">Edit Class and Section Details</h2>
             </div>
             <div style="padding: 1.5rem;">
                 <form method="POST">
                     <div class="form-group">
-                        <label for="name" style="font-weight: 600; color: var(--text-main);">Department Name</label>
+                        <label for="name" style="font-weight: 600; color: var(--text-main);">Class and Section Name</label>
                         <input type="text" id="name" name="name" class="form-control" value="<?= htmlspecialchars($dept['name']) ?>" required autofocus>
                     </div>
 
                     <div class="form-group">
-                        <label for="code" style="font-weight: 600; color: var(--text-main);">Department Code</label>
+                        <label for="code" style="font-weight: 600; color: var(--text-main);">Class and Section Code</label>
                         <input type="text" id="code" name="code" class="form-control" value="<?= htmlspecialchars($dept['code']) ?>" required maxlength="10">
                     </div>
 

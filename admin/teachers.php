@@ -73,7 +73,7 @@ if (!empty($search)) {
                         <th>Teacher Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Department</th>
+                        <th>Class and Section</th>
                         <th>Qualification</th>
                         <th>Phone</th>
                         <th style="width: 150px; text-align: right;">Actions</th>

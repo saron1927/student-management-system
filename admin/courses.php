@@ -35,11 +35,11 @@ if (!empty($search)) {
 <main class="main-content">
     <header class="top-nav">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700;">Manage Courses</h1>
-            <p style="color: var(--text-muted);">Configure active classes, modules, and academic credits</p>
+            <h1 style="font-size: 1.5rem; font-weight: 700;">Manage Subjects</h1>
+            <p style="color: var(--text-muted);">Configure active subjects, modules, and academic hours</p>
         </div>
         <a href="course-create.php" class="btn btn-primary" style="width: auto; text-decoration: none;">
-            <i class="fas fa-plus"></i> Add New Course
+            <i class="fas fa-plus"></i> Add New Subject
         </a>
     </header>
 
@@ -60,7 +60,7 @@ if (!empty($search)) {
             <form method="GET" style="display: flex; gap: 1rem; flex: 1; max-width: 400px;">
                 <div style="position: relative; flex: 1;">
                     <i class="fas fa-search" style="position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
-                    <input type="text" name="search" class="form-control" placeholder="Search by name, code, dept..." value="<?= htmlspecialchars($search) ?>" style="padding-left: 2.5rem;">
+                    <input type="text" name="search" class="form-control" placeholder="Search by name, code, class..." value="<?= htmlspecialchars($search) ?>" style="padding-left: 2.5rem;">
                 </div>
                 <button type="submit" class="btn" style="background: #e2e8f0; color: var(--text-main); font-size: 0.875rem;">Search</button>
                 <?php if (!empty($search)): ?>
@@ -72,9 +72,9 @@ if (!empty($search)) {
             <table>
                 <thead>
                     <tr>
-                        <th>Course Code</th>
-                        <th>Course Name</th>
-                        <th>Department</th>
+                        <th>Subject Code</th>
+                        <th>Subject Name</th>
+                        <th>Class and Section</th>
                         <th>Credits</th>
                         <th>Assigned Teacher</th>
                         <th style="width: 150px; text-align: right;">Actions</th>
@@ -105,14 +105,14 @@ if (!empty($search)) {
                             <td>
                                 <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
                                     <a href="course-edit.php?id=<?= $course['id'] ?>" class="btn" style="padding: 0.5rem; background: #e0f2fe; color: var(--accent);"><i class="fas fa-edit"></i></a>
-                                    <a href="course-delete.php?id=<?= $course['id'] ?>" class="btn" style="padding: 0.5rem; background: #fee2e2; color: var(--danger);" onclick="return confirm('Are you sure you want to delete this course?')"><i class="fas fa-trash"></i></a>
+                                    <a href="course-delete.php?id=<?= $course['id'] ?>" class="btn" style="padding: 0.5rem; background: #fee2e2; color: var(--danger);" onclick="return confirm('Are you sure you want to delete this subject?')"><i class="fas fa-trash"></i></a>
                                 </div>
                             </td>
                         </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No courses found.</td>
+                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No subjects found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

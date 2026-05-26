@@ -28,7 +28,7 @@ $recent_students = $pdo->query("
         </div>
         <div style="display: flex; align-items: center; gap: 1rem;">
             <div style="text-align: right;">
-                <p style="font-weight: 600;"><?= $_SESSION['full_name'] ?></p>
+                <p style="font-weight: 600;"><?= $_SESSION['full_name'] ?? $_SESSION['username'] ?? 'User' ?></p>
                 <p style="font-size: 0.75rem; color: var(--text-muted);">Administrator</p>
             </div>
             <img src="../assets/images/default.png" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--accent);">
@@ -59,7 +59,7 @@ $recent_students = $pdo->query("
                 <i class="fas fa-book"></i>
             </div>
             <div class="stat-info">
-                <h3>Total Courses</h3>
+                <h3>Total Subjects</h3>
                 <p><?= number_format($total_courses) ?></p>
             </div>
         </div>
@@ -68,7 +68,7 @@ $recent_students = $pdo->query("
                 <i class="fas fa-building"></i>
             </div>
             <div class="stat-info">
-                <h3>Departments</h3>
+                <h3>Classes and Sections</h3>
                 <p><?= number_format($total_depts) ?></p>
             </div>
         </div>
@@ -85,7 +85,7 @@ $recent_students = $pdo->query("
                     <tr>
                         <th>Student ID</th>
                         <th>Full Name</th>
-                        <th>Department</th>
+                        <th>Class and Section</th>
                         <th>Enrollment Date</th>
                         <th>Status</th>
                         <th>Action</th>

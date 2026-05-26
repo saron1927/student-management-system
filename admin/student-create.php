@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $address = trim($_POST['address'] ?? '');
 
     if (empty($full_name) || empty($email) || empty($username) || empty($password) || empty($student_id_no) || $dept_id <= 0) {
-        $error = "All primary fields (Full Name, Username, Email, Password, Student ID No, Department) are required!";
+        $error = "All primary fields (Full Name, Username, Email, Password, Student ID No, and Grade/Class Section) are required!";
     } else {
         try {
             // Check if username, email or student_id_no already exists
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <?php if (count($departments) === 0): ?>
             <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
-                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create a department</a> before registering a student!
+                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create grade classes and sections</a> (e.g. Grade 7-A, Grade 8-B) before registering a student!
             </div>
         <?php endif; ?>
 
@@ -113,13 +113,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Department / Stream</label>
+                            <label for="dept_id" style="font-weight: 600;">Grade / Class &amp; Section</label>
                             <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Department --</option>
+                                <option value="">-- Select Grade &amp; Section --</option>
                                 <?php foreach ($departments as $dept): ?>
                                     <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?></option>
                                 <?php endforeach; ?>
                             </select>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;"><i class="fas fa-info-circle"></i> The grade level and section this student belongs to (e.g. Grade 7-A).</p>
                         </div>
                         <div class="form-group">
                             <label for="phone" style="font-weight: 600;">Phone Number</label>

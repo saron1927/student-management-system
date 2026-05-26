@@ -4,11 +4,7 @@ require 'config.php';
 
 // 1. REDIRECT IF ALREADY LOGGED IN
 if (isset($_SESSION['user_id'])) {
-    if ($_SESSION['role'] === 'admin') {
-        header("Location: dashboard.php");
-    } else {
-        header("Location: my_profile.php");
-    }
+    header("Location: " . $_SESSION['role'] . "/dashboard.php");
     exit();
 }
 
@@ -32,14 +28,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Set Session Variables
             $_SESSION['user_id'] = $user['id'];
             $_SESSION['username'] = $user['username'];
+            $_SESSION['full_name'] = $user['full_name'] ?? $user['username'];
             $_SESSION['role'] = $user['role']; 
 
             // Redirect based on role
-            if ($user['role'] === 'admin') {
-                header("Location: dashboard.php");
-            } else {
-                header("Location: my_profile.php");
-            }
+            header("Location: " . $user['role'] . "/dashboard.php");
             exit();
         } else {
             $error = "Invalid username or password!";
@@ -159,7 +152,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </form>
 
         <div class="footer-link">
-            <a href="index.html">← Back to Homepage</a>
+            <a href="index.php">← Back to Homepage</a>
         </div>
     </div>
 

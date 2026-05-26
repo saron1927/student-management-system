@@ -217,7 +217,7 @@ $student_grades = $stmt->fetchAll();
             </div>
             <div style="display: flex; gap: 2rem; font-size: 0.875rem;">
                 <div>
-                    <span style="color: var(--text-muted); display: block;">Department</span>
+                    <span style="color: var(--text-muted); display: block;">Class and Section</span>
                     <strong><?= htmlspecialchars($student['dept_name']) ?></strong>
                 </div>
                 <div>

@@ -73,7 +73,7 @@ if (!empty($search)) {
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Department</th>
+                        <th>Class and Section</th>
                         <th>Phone</th>
                         <th>Date of Birth</th>
                         <th>Status</th>

@@ -66,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <main class="main-content">
     <header class="top-nav">
         <div>
-            <h1 style="font-size: 1.5rem; font-weight: 700;">Edit Course</h1>
-            <p style="color: var(--text-muted);"><a href="courses.php" style="color: var(--accent); text-decoration: none;">Courses</a> &raquo; Edit</p>
+            <h1 style="font-size: 1.5rem; font-weight: 700;">Edit Subject</h1>
+            <p style="color: var(--text-muted);"><a href="courses.php" style="color: var(--accent); text-decoration: none;">Subjects</a> &raquo; Edit</p>
         </div>
         <a href="courses.php" class="btn" style="background: #f1f5f9; color: var(--text-main); text-decoration: none; width: auto;">
             <i class="fas fa-arrow-left"></i> Back to List
@@ -83,26 +83,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="card">
             <div class="card-header">
-                <h2 style="font-size: 1.125rem;">Edit Course Details</h2>
+                <h2 style="font-size: 1.125rem;">Edit Subject Details</h2>
             </div>
             <div style="padding: 1.5rem;">
                 <form method="POST">
                     <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label for="name" style="font-weight: 600;">Course Name</label>
+                            <label for="name" style="font-weight: 600;">Subject Name</label>
                             <input type="text" id="name" name="name" class="form-control" value="<?= htmlspecialchars($course['name']) ?>" required autofocus>
                         </div>
                         <div class="form-group">
-                            <label for="code" style="font-weight: 600;">Course Code</label>
+                            <label for="code" style="font-weight: 600;">Subject Code</label>
                             <input type="text" id="code" name="code" class="form-control" value="<?= htmlspecialchars($course['code']) ?>" required maxlength="10">
                         </div>
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                         <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Department</label>
+                            <label for="dept_id" style="font-weight: 600;">Class and Section</label>
                             <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Department --</option>
+                                <option value="">-- Select Class and Section --</option>
                                 <?php foreach ($departments as $dept): ?>
                                     <option value="<?= $dept['id'] ?>" <?= ($course['dept_id'] == $dept['id']) ? 'selected' : '' ?>><?= htmlspecialchars($dept['name']) ?> (<?= htmlspecialchars($dept['code']) ?>)</option>
                                 <?php endforeach; ?>
