@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Unauthorized Access</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
 </head>
 <body style="display: flex; align-items: center; justify-content: center; height: 100vh; background: #f1f5f9;">
     <div style="text-align: center; background: white; padding: 3rem; border-radius: 1rem; box-shadow: var(--shadow);">

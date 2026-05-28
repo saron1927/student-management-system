@@ -26,11 +26,7 @@ $role = $_SESSION['role'] ?? '';
                 <i class="fas fa-chalkboard-teacher"></i> Teachers
             </a>
         </li>
-        <li>
-            <a href="departments.php" class="sidebar-link <?= ($current_page == 'departments.php') ? 'active' : '' ?>">
-                <i class="fas fa-building"></i> Classes and Sections
-            </a>
-        </li>
+
         <li>
             <a href="courses.php" class="sidebar-link <?= ($current_page == 'courses.php') ? 'active' : '' ?>">
                 <i class="fas fa-book"></i> Subjects

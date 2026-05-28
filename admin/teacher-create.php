@@ -14,11 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
-    $dept_id = intval($_POST['dept_id'] ?? 0);
     $qualification = trim($_POST['qualification'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
+    $dept_id = 1; // Defaulting to 1 as it's required by db but handled invisibly
 
-    if (empty($full_name) || empty($email) || empty($username) || empty($password) || $dept_id <= 0) {
+    if (empty($full_name) || empty($email) || empty($username) || empty($password)) {
         $error = "All primary fields (Full Name, Username, Email, Password, and Assigned Class) are required!";
     } else {
         try {
@@ -83,11 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <?php if (count($departments) === 0): ?>
-            <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
-                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create grade classes and sections</a> (e.g. Grade 7-A, Grade 8-B) before adding a teacher!
-            </div>
-        <?php endif; ?>
+
 
         <div class="card">
             <div class="card-header">
@@ -108,15 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Assigned Class <span style="color: var(--text-muted); font-weight: 400;">(Where Teaching)</span></label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Class &amp; Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;"><i class="fas fa-chalkboard-teacher"></i> The grade/class this teacher is responsible for teaching (e.g. Grade 7-A). This is <strong>not</strong> a subject assignment.</p>
                         </div>
                         <div class="form-group">
                             <label for="qualification" style="font-weight: 600;">Qualification / Title</label>
@@ -141,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;" <?= (count($departments) === 0) ? 'disabled' : '' ?>>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
                         <i class="fas fa-save"></i> Save Teacher Profile
                     </button>
                 </form>

@@ -35,14 +35,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
-    $dept_id = intval($_POST['dept_id'] ?? 0);
+    $dept_id = 1;
     $qualification = trim($_POST['qualification'] ?? '');
     $phone = trim($_POST['phone'] ?? '');
 
     $user_id = $teacher['id']; // users.id
 
-    if (empty($full_name) || empty($email) || empty($username) || $dept_id <= 0) {
-        $error = "All primary fields (Full Name, Username, Email, Class and Section) are required!";
+    if (empty($full_name) || empty($email) || empty($username)) {
+        $error = "All primary fields (Full Name, Username, Email) are required!";
     } else {
         try {
             // Check if username or email already exists in OTHER users
@@ -121,15 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Class and Section Assignment</label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Class and Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>" <?= ($teacher['dept_id'] == $dept['id']) ? 'selected' : '' ?>><?= htmlspecialchars($dept['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+
                         <div class="form-group">
                             <label for="qualification" style="font-weight: 600;">Qualification / Title</label>
                             <input type="text" id="qualification" name="qualification" class="form-control" value="<?= htmlspecialchars($teacher['qualification'] ?? '') ?>" placeholder="e.g. PhD in Computer Science">

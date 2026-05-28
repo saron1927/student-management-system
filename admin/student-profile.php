@@ -216,10 +216,7 @@ $student_grades = $stmt->fetchAll();
                 </div>
             </div>
             <div style="display: flex; gap: 2rem; font-size: 0.875rem;">
-                <div>
-                    <span style="color: var(--text-muted); display: block;">Class and Section</span>
-                    <strong><?= htmlspecialchars($student['dept_name']) ?></strong>
-                </div>
+
                 <div>
                     <span style="color: var(--text-muted); display: block;">Email</span>
                     <strong><?= htmlspecialchars($student['email']) ?></strong>
@@ -248,7 +245,7 @@ $student_grades = $stmt->fetchAll();
                         <select name="course_id" class="form-control" required style="flex: 1; margin: 0;">
                             <option value="">-- Select Course --</option>
                             <?php foreach ($available_courses as $ac): ?>
-                                <option value="<?= $ac['id'] ?>"><?= htmlspecialchars($ac['name']) ?> (<?= htmlspecialchars($ac['code']) ?>) - [<?= htmlspecialchars($ac['dept_name']) ?>]</option>
+                                <option value="<?= $ac['id'] ?>"><?= htmlspecialchars($ac['name']) ?> (<?= htmlspecialchars($ac['code']) ?>)</option>
                             <?php endforeach; ?>
                         </select>
                         <button type="submit" name="action_enroll" class="btn btn-primary" style="width: auto; height: 42px;">

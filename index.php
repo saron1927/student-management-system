@@ -44,8 +44,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <!-- CSS Stylesheets -->
-    <link rel="stylesheet" href="assets/css/style.css?v=3.0">
-    <link rel="stylesheet" href="assets/css/landing.css?v=3.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>">
+    <link rel="stylesheet" href="assets/css/landing.css?v=<?= time() ?>">
 </head>
 <body>
 

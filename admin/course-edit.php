@@ -37,10 +37,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $code = strtoupper(trim($_POST['code'] ?? ''));
     $credits = intval($_POST['credits'] ?? 0);
-    $dept_id = intval($_POST['dept_id'] ?? 0);
+    $dept_id = 1;
     $teacher_id = !empty($_POST['teacher_id']) ? intval($_POST['teacher_id']) : null;
 
-    if (empty($name) || empty($code) || $credits <= 0 || $dept_id <= 0) {
+    if (empty($name) || empty($code) || $credits <= 0) {
         $error = "All primary fields are required! Credits must be greater than 0.";
     } else {
         try {
@@ -99,15 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Class and Section</label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Class and Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>" <?= ($course['dept_id'] == $dept['id']) ? 'selected' : '' ?>><?= htmlspecialchars($dept['name']) ?> (<?= htmlspecialchars($dept['code']) ?>)</option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+
                         <div class="form-group">
                             <label for="credits" style="font-weight: 600;">Credits</label>
                             <input type="number" id="credits" name="credits" class="form-control" min="1" max="10" value="<?= htmlspecialchars($course['credits']) ?>" required>

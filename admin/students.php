@@ -73,7 +73,6 @@ if (!empty($search)) {
                         <th>Student ID</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Class and Section</th>
                         <th>Phone</th>
                         <th>Date of Birth</th>
                         <th>Status</th>
@@ -94,7 +93,6 @@ if (!empty($search)) {
                                 </div>
                             </td>
                             <td><?= htmlspecialchars($student['email']) ?></td>
-                            <td><?= htmlspecialchars($student['dept_name']) ?></td>
                             <td><?= htmlspecialchars($student['phone'] ?? 'N/A') ?></td>
                             <td><?= $student['dob'] ? date('M d, Y', strtotime($student['dob'])) : 'N/A' ?></td>
                             <td><span class="badge badge-success">Active</span></td>
@@ -110,7 +108,7 @@ if (!empty($search)) {
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="8" style="text-align: center; color: var(--text-muted); padding: 2rem;">No students found.</td>
+                            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No students found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

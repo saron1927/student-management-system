@@ -21,10 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
     $code = strtoupper(trim($_POST['code'] ?? ''));
     $credits = intval($_POST['credits'] ?? 0);
-    $dept_id = intval($_POST['dept_id'] ?? 0);
+    $dept_id = 1;
     $teacher_id = !empty($_POST['teacher_id']) ? intval($_POST['teacher_id']) : null;
 
-    if (empty($name) || empty($code) || $credits <= 0 || $dept_id <= 0) {
+    if (empty($name) || empty($code) || $credits <= 0) {
         $error = "All primary fields are required! Credits must be greater than 0.";
     } else {
         try {
@@ -65,11 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <?php if (count($departments) === 0): ?>
-            <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
-                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create a class and section</a> before adding a subject!
-            </div>
-        <?php endif; ?>
+
 
         <div class="card">
             <div class="card-header">
@@ -89,15 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Class and Section</label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Class and Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?> (<?= htmlspecialchars($dept['code']) ?>)</option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+
                         <div class="form-group">
                             <label for="credits" style="font-weight: 600;">Credits</label>
                             <input type="number" id="credits" name="credits" class="form-control" min="1" max="10" placeholder="e.g. 3" required>
@@ -114,7 +102,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </select>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;" <?= (count($departments) === 0) ? 'disabled' : '' ?>>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
                         <i class="fas fa-save"></i> Save Subject
                     </button>
                 </form>

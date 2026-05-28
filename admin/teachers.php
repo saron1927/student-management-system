@@ -73,7 +73,6 @@ if (!empty($search)) {
                         <th>Teacher Name</th>
                         <th>Username</th>
                         <th>Email</th>
-                        <th>Class and Section</th>
                         <th>Qualification</th>
                         <th>Phone</th>
                         <th style="width: 150px; text-align: right;">Actions</th>
@@ -93,7 +92,6 @@ if (!empty($search)) {
                             </td>
                             <td style="font-family: monospace; font-weight: 600;"><?= htmlspecialchars($teacher['username']) ?></td>
                             <td><?= htmlspecialchars($teacher['email']) ?></td>
-                            <td><?= htmlspecialchars($teacher['dept_name'] ?? 'Unassigned') ?></td>
                             <td style="font-size: 0.8rem; color: var(--text-muted);"><?= htmlspecialchars($teacher['qualification'] ?? 'N/A') ?></td>
                             <td><?= htmlspecialchars($teacher['phone'] ?? 'N/A') ?></td>
                             <td>
@@ -107,7 +105,7 @@ if (!empty($search)) {
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2rem;">No teachers found.</td>
+                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No teachers found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

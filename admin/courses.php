@@ -74,7 +74,6 @@ if (!empty($search)) {
                     <tr>
                         <th>Subject Code</th>
                         <th>Subject Name</th>
-                        <th>Class and Section</th>
                         <th>Credits</th>
                         <th>Assigned Teacher</th>
                         <th style="width: 150px; text-align: right;">Actions</th>
@@ -86,7 +85,6 @@ if (!empty($search)) {
                         <tr>
                             <td style="font-weight: 600; color: var(--accent);"><?= htmlspecialchars($course['code']) ?></td>
                             <td style="font-weight: 500;"><?= htmlspecialchars($course['name']) ?></td>
-                            <td><?= htmlspecialchars($course['dept_name'] ?? 'Unassigned') ?></td>
                             <td>
                                 <span class="badge" style="background: #fef3c7; color: #d97706; font-weight: 700;">
                                     <?= htmlspecialchars($course['credits']) ?> Credits
@@ -112,7 +110,7 @@ if (!empty($search)) {
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>
-                            <td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">No subjects found.</td>
+                            <td colspan="5" style="text-align: center; color: var(--text-muted); padding: 2rem;">No subjects found.</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>

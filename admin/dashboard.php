@@ -8,14 +8,12 @@ require_once '../includes/sidebar.php';
 $total_students = $pdo->query("SELECT COUNT(*) FROM students")->fetchColumn();
 $total_teachers = $pdo->query("SELECT COUNT(*) FROM teachers")->fetchColumn();
 $total_courses = $pdo->query("SELECT COUNT(*) FROM courses")->fetchColumn();
-$total_depts = $pdo->query("SELECT COUNT(*) FROM departments")->fetchColumn();
 
 // Fetch recent students
 $recent_students = $pdo->query("
-    SELECT s.*, u.full_name, d.name as dept_name 
+    SELECT s.*, u.full_name 
     FROM students s 
     JOIN users u ON s.user_id = u.id 
-    JOIN departments d ON s.dept_id = d.id 
     ORDER BY u.created_at DESC LIMIT 5
 ")->fetchAll();
 ?>
@@ -63,15 +61,6 @@ $recent_students = $pdo->query("
                 <p><?= number_format($total_courses) ?></p>
             </div>
         </div>
-        <div class="stat-card">
-            <div class="stat-icon" style="background: var(--danger);">
-                <i class="fas fa-building"></i>
-            </div>
-            <div class="stat-info">
-                <h3>Classes and Sections</h3>
-                <p><?= number_format($total_depts) ?></p>
-            </div>
-        </div>
     </div>
 
     <div class="card">
@@ -85,7 +74,6 @@ $recent_students = $pdo->query("
                     <tr>
                         <th>Student ID</th>
                         <th>Full Name</th>
-                        <th>Class and Section</th>
                         <th>Enrollment Date</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -96,7 +84,6 @@ $recent_students = $pdo->query("
                     <tr>
                         <td style="font-weight: 600;"><?= $student['student_id_no'] ?></td>
                         <td><?= $student['full_name'] ?></td>
-                        <td><?= $student['dept_name'] ?></td>
                         <td><?= date('M d, Y') ?></td>
                         <td><span class="badge badge-success">Active</span></td>
                         <td>

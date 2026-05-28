@@ -36,15 +36,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $student_id_no = strtoupper(trim($_POST['student_id_no'] ?? ''));
-    $dept_id = intval($_POST['dept_id'] ?? 0);
+    $dept_id = 1;
     $phone = trim($_POST['phone'] ?? '');
     $dob = trim($_POST['dob'] ?? '');
     $address = trim($_POST['address'] ?? '');
 
     $user_id = $student['id']; // users.id
 
-    if (empty($full_name) || empty($email) || empty($username) || empty($student_id_no) || $dept_id <= 0) {
-        $error = "All primary fields (Full Name, Username, Email, Student ID No, and Grade/Class Section) are required!";
+    if (empty($full_name) || empty($email) || empty($username) || empty($student_id_no)) {
+        $error = "All primary fields (Full Name, Username, Email, Student ID No) are required!";
     } else {
         try {
             // Check if username or email already exists in OTHER users
@@ -130,16 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Grade / Class &amp; Section</label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Grade &amp; Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>" <?= ($student['dept_id'] == $dept['id']) ? 'selected' : '' ?>><?= htmlspecialchars($dept['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;"><i class="fas fa-info-circle"></i> The grade level and section this student belongs to (e.g. Grade 7-A).</p>
-                        </div>
+
                         <div class="form-group">
                             <label for="phone" style="font-weight: 600;">Phone Number</label>
                             <input type="text" id="phone" name="phone" class="form-control" value="<?= htmlspecialchars($student['phone'] ?? '') ?>" placeholder="e.g. +1 555-0155">

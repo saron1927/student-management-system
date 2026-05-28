@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = trim($_POST['username'] ?? '');
     $password = $_POST['password'] ?? '';
     $student_id_no = strtoupper(trim($_POST['student_id_no'] ?? ''));
-    $dept_id = intval($_POST['dept_id'] ?? 0);
+    $dept_id = 1;
     $phone = trim($_POST['phone'] ?? '');
     $dob = trim($_POST['dob'] ?? '');
     $address = trim($_POST['address'] ?? '');
 
-    if (empty($full_name) || empty($email) || empty($username) || empty($password) || empty($student_id_no) || $dept_id <= 0) {
-        $error = "All primary fields (Full Name, Username, Email, Password, Student ID No, and Grade/Class Section) are required!";
+    if (empty($full_name) || empty($email) || empty($username) || empty($password) || empty($student_id_no)) {
+        $error = "All primary fields (Full Name, Username, Email, Password, and Student ID No) are required!";
     } else {
         try {
             // Check if username, email or student_id_no already exists
@@ -87,11 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         <?php endif; ?>
 
-        <?php if (count($departments) === 0): ?>
-            <div style="background: #fef3c7; color: #d97706; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1.5rem; font-size: 0.875rem;">
-                <i class="fas fa-exclamation-triangle"></i> You must <a href="department-create.php" style="color: #b45309; font-weight: 700;">create grade classes and sections</a> (e.g. Grade 7-A, Grade 8-B) before registering a student!
-            </div>
-        <?php endif; ?>
+
 
         <div class="card">
             <div class="card-header">
@@ -112,16 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
 
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="dept_id" style="font-weight: 600;">Grade / Class &amp; Section</label>
-                            <select id="dept_id" name="dept_id" class="form-control" required>
-                                <option value="">-- Select Grade &amp; Section --</option>
-                                <?php foreach ($departments as $dept): ?>
-                                    <option value="<?= $dept['id'] ?>"><?= htmlspecialchars($dept['name']) ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem;"><i class="fas fa-info-circle"></i> The grade level and section this student belongs to (e.g. Grade 7-A).</p>
-                        </div>
+
                         <div class="form-group">
                             <label for="phone" style="font-weight: 600;">Phone Number</label>
                             <input type="text" id="phone" name="phone" class="form-control" placeholder="e.g. +1 555-0155">
@@ -157,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required>
                     </div>
 
-                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;" <?= (count($departments) === 0) ? 'disabled' : '' ?>>
+                    <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">
                         <i class="fas fa-save"></i> Save Student Profile
                     </button>
                 </form>
